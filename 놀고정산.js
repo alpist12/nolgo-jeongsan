@@ -15,7 +15,7 @@ const storageKey = "nolgo-jeongsan-state-v2";
 const roomStorageKey = "nolgo-jeongsan-room-id";
 const siteUrl = typeof window !== "undefined" && window.location.origin
   ? (window.location.origin + window.location.pathname.replace(/\/[^/]*$/, "/"))
-  : "https://alpist07.github.io/nolgo-jeongsan/";
+  : "https://alpist12.github.io/nolgo-jeongsan/";
 const initialQuery = new URLSearchParams(location.search);
 const shouldStartOnLanding = initialQuery.has("landing") || !initialQuery.has("room");
 // Matches the app's own DEFAULT_ROOM_ID (src/state/RoomContext.tsx) — this
