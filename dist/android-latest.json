@@ -1,6 +1,6 @@
 {
-  "versionCode": 18,
-  "versionName": "1.9.8",
+  "versionCode": 19,
+  "versionName": "1.9.9",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "Live CodePush 무음 패치 엔진 탑재 및 영수증 정산 뱃지 정상화"
+  "notes": "정상 표준 진입점 복원 및 영수증 정산 뱃지 정상화"
 }
