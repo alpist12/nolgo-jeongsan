@@ -40,13 +40,13 @@ async function sendUpdatePush() {
   const response = await messaging.sendEachForMulticast({
     tokens,
     notification: {
-      title: "놀고정산 v1.9.1 업데이트 출시",
-      body: "카카오톡 영수증 공유 및 정산 알림 기능이 개선되었어요. 터치하여 바로 업데이트하세요!",
+      title: "놀고정산 v2.0 (무인 라이브 업데이트 지원)",
+      body: "이번 마지막 업데이트를 받으시면, 앞으로는 설치 창 없이 켜기만 해도 알아서 최신 기능으로 바뀝니다!",
     },
     data: {
       type: "update",
-      versionCode: "11",
-      versionName: "1.9.1",
+      versionCode: "12",
+      versionName: "2.0",
     },
   });
 
