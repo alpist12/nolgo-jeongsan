@@ -313,9 +313,99 @@ async function copyReceiptLink(button, resetText) {
   setTimeout(() => { button.textContent = resetText ?? oldText; }, 1400);
 }
 
-// Prefers the OS share sheet (카톡/문자/메일 등 바로 선택) when available,
-// falling back to a clipboard copy on desktop browsers that don't support it.
+const KAKAO_JAVASCRIPT_KEY = "ad3721fda3a3474488dded4cf8e26112";
+
+function initKakaoSDK() {
+  if (typeof window !== "undefined" && window.Kakao) {
+    if (!window.Kakao.isInitialized()) {
+      window.Kakao.init(KAKAO_JAVASCRIPT_KEY);
+    }
+    return window.Kakao.isInitialized();
+  }
+  return false;
+}
+
+function shareKakaoCard() {
+  if (!initKakaoSDK()) return false;
+  try {
+    const items = currentItems() || [];
+    const total = items.reduce((sum, it) => sum + (Number(it.amount) || (typeof itemTotal === "function" ? itemTotal(it) : 0) || 0), 0);
+    const rawDate = state.mode === "budget" ? state.plannedDate : state.usedDate;
+
+    const peopleSet = new Set();
+    items.forEach((it) => {
+      if (it.payer && it.payer !== "공금") peopleSet.add(it.payer);
+      (it.users || []).forEach((u) => { if (u && u !== "공금") peopleSet.add(u); });
+    });
+    const peopleCount = peopleSet.size || 1;
+
+    // Kakao itemContent items (max 5)
+    const itemRows = items.slice(0, 3).map((it, idx) => {
+      const userCount = (it.users || []).length || peopleCount;
+      const label = it.place || it.name || "";
+      const prefix = `${idx + 1}차(${label ? label + ", " : ""}${userCount}명)`;
+      const amt = Number(it.amount) || (typeof itemTotal === "function" ? itemTotal(it) : 0) || 0;
+      return { item: prefix, itemOp: `${amt.toLocaleString("ko-KR")}원` };
+    });
+
+    itemRows.push({ item: "요청인원", itemOp: `${peopleCount}명` });
+
+    const baseDate = rawDate ? new Date(`${rawDate}T00:00:00`) : new Date();
+    const dueDate = new Date(baseDate.getTime() + 4 * 24 * 60 * 60 * 1000);
+    const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+    const dueStr = `${dueDate.getMonth() + 1}.${dueDate.getDate()}.(${weekdays[dueDate.getDay()]})까지`;
+    itemRows.push({ item: "정산기한", itemOp: dueStr });
+
+    const avgAmount = Math.round(total / peopleCount);
+    const sendGuide = avgAmount > 0
+      ? `${avgAmount.toLocaleString("ko-KR")}원을 송금해주세요.`
+      : "정산 내용을 확인하고 송금해주세요.";
+
+    const url = buildShareUrl();
+
+    window.Kakao.Share.sendDefault({
+      objectType: "feed",
+      content: {
+        title: "정산을 시작했어요",
+        description: `정산 내용을 확인해주세요.\n\n${sendGuide}\n* 정산기한이 지나기 전에 정산을 완료해주세요.`,
+        imageUrl: "https://nolgo.netlify.app/nolgo-settle-banner.png",
+        imageWidth: 800,
+        imageHeight: 400,
+        link: {
+          mobileWebUrl: url,
+          webUrl: url,
+        },
+      },
+      itemContent: {
+        profileText: "놀고정산",
+        profileImageUrl: "https://nolgo.netlify.app/favicon.svg",
+        titleImageText: `정산금액 ${total.toLocaleString("ko-KR")}원`,
+        items: itemRows,
+        sum: "총 정산금액",
+        sumOp: `${total.toLocaleString("ko-KR")}원`,
+      },
+      buttons: [
+        {
+          title: "정산현황 보기",
+          link: {
+            mobileWebUrl: url,
+            webUrl: url,
+          },
+        },
+      ],
+    });
+    return true;
+  } catch (error) {
+    console.warn("Kakao.Share failed:", error);
+    return false;
+  }
+}
+
+// Prefers the Kakao SDK card share, then the OS share sheet, then clipboard copy.
 async function shareOrCopyReceiptLink(button, resetText) {
+  if (shareKakaoCard()) {
+    return;
+  }
   const shareText = buildKakaoShareText();
   const title = "정산을 시작했어요";
   const url = buildShareUrl();
