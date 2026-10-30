@@ -43,13 +43,13 @@ async function sendUpdatePush() {
   const response = await messaging.sendEachForMulticast({
     tokens,
     notification: {
-      title: "놀고정산 v1.9.4 업데이트 안내",
-      body: "카카오페이 스타일 카드형 공유 & 무인 자동 업데이트가 준비되었어요. 터치하여 업데이트를 완료하세요!",
+      title: "놀고정산 v1.9.5 업데이트 안내",
+      body: "스켈레톤 로딩, 쫀득한 스프링 터치감, D-day 리마인더 배너가 적용되었어요!",
     },
     data: {
       type: "update",
-      versionCode: "14",
-      versionName: "1.9.4",
+      versionCode: "15",
+      versionName: "1.9.5",
     },
   });
 

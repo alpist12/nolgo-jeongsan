@@ -1,6 +1,6 @@
 {
-  "versionCode": 15,
-  "versionName": "1.9.5",
+  "versionCode": 16,
+  "versionName": "1.9.6",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "스켈레톤 로딩, 쫀득한 스프링 터치감, 로딩 버튼, 디데이 알림 배너 & 뱃지 적용"
+  "notes": "안드로이드 OS DownloadManager 직통 자가 업데이트 탑재 및 권한 처리 완비"
 }
