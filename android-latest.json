@@ -1,6 +1,6 @@
 {
-  "versionCode": 14,
-  "versionName": "1.9.4",
+  "versionCode": 15,
+  "versionName": "1.9.5",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "카카오페이 스타일 카드형 발송 직통 연결 및 무인 자동 업데이트"
+  "notes": "스켈레톤 로딩, 쫀득한 스프링 터치감, 로딩 버튼, 디데이 알림 배너 & 뱃지 적용"
 }
