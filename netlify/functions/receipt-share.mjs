@@ -54,7 +54,7 @@ export const handler = async (event) => {
   const title = `${displayDate(rawDate)} ${String(receipt.title || fallback).trim()}`;
   const total = Object.values(receipt.items || {}).reduce((sum, item) => sum + Number(item?.amount || 0), 0);
   const people = new Set(Object.values(receipt.items || {}).flatMap((item) => [item?.payer, ...Object.values(item?.users || {})]).filter((name) => name && name !== "공금"));
-  const description = `정산금액 ${total.toLocaleString("ko-KR")}원 · ${people.size || 1}명 · 정산 내용을 확인해 주세요.`;
+  const description = `정산금액 : ${total.toLocaleString("ko-KR")}원 · 요청인원 : ${people.size || 1}명 · 정산 내용을 확인해 주세요.`;
   const targetParams = new URLSearchParams({ id });
   if (room || receipt.roomId) targetParams.set("room", room || receipt.roomId);
   const target = `/receipt/view.html?${targetParams.toString()}`;
@@ -65,6 +65,6 @@ export const handler = async (event) => {
   return {
     statusCode: 200,
     headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=60" },
-    body: `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title><meta property="og:title" content="정산을 시작했어요 · ${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:image" content="https://nolgo.netlify.app/nolgo-3d-banners.png"><meta property="og:type" content="website"><meta property="og:site_name" content="놀고정산"><meta http-equiv="refresh" content="0;url=${safeTarget}"></head><body><a href="${safeTarget}">${safeTitle}</a><script>location.replace(${JSON.stringify(target)})</script></body></html>`
+    body: `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title><meta property="og:title" content="정산을 시작했어요 · ${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:image" content="https://nolgo.netlify.app/nolgo-settle-banner.png"><meta property="og:type" content="website"><meta property="og:site_name" content="놀고정산"><meta http-equiv="refresh" content="0;url=${safeTarget}"></head><body><a href="${safeTarget}">${safeTitle}</a><script>location.replace(${JSON.stringify(target)})</script></body></html>`
   };
 };

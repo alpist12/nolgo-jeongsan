@@ -1,6 +1,6 @@
 {
-  "versionCode": 10,
-  "versionName": "1.9",
+  "versionCode": 11,
+  "versionName": "1.9.1",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "크루별 영수증 복구, 계정 UID 연결, 영수증 추가 및 송금·공유 개선"
+  "notes": "카카오톡 영수증 공유 메시지 포맷 개선 및 미정산 알림 기능 강화"
 }

@@ -252,20 +252,76 @@ function buildShareUrl() {
   return `${location.origin}${basePath}view.html?${params.toString()}`;
 }
 
+function buildKakaoShareText() {
+  const items = currentItems() || [];
+  const total = items.reduce((sum, it) => sum + (Number(it.amount) || (typeof itemTotal === "function" ? itemTotal(it) : 0) || 0), 0);
+  const rawDate = state.mode === "budget" ? state.plannedDate : state.usedDate;
+
+  const peopleSet = new Set();
+  items.forEach((it) => {
+    if (it.payer && it.payer !== "공금") peopleSet.add(it.payer);
+    (it.users || []).forEach((u) => { if (u && u !== "공금") peopleSet.add(u); });
+  });
+  const peopleCount = peopleSet.size || 1;
+
+  const itemLines = items.map((it, idx) => {
+    const userCount = (it.users || []).length || peopleCount;
+    const label = it.place || it.name || "";
+    const prefix = `${idx + 1}차(${label ? label + ", " : ""}${userCount}명)`;
+    const amt = Number(it.amount) || (typeof itemTotal === "function" ? itemTotal(it) : 0) || 0;
+    return `- ${prefix} : ${amt.toLocaleString("ko-KR")}원`;
+  });
+
+  const baseDate = rawDate ? new Date(`${rawDate}T00:00:00`) : new Date();
+  const dueDate = new Date(baseDate.getTime() + 4 * 24 * 60 * 60 * 1000);
+  const weekdays = ["일", "월", "화", "수", "목", "금", "토"];
+  const dueYear = dueDate.getFullYear();
+  const dueMonth = String(dueDate.getMonth() + 1).padStart(2, "0");
+  const dueDay = String(dueDate.getDate()).padStart(2, "0");
+  const dueWeekday = weekdays[dueDate.getDay()];
+  const dueStr = `${dueYear}. ${dueMonth}. ${dueDay}.(${dueWeekday})까지`;
+
+  const avgAmount = Math.round(total / peopleCount);
+  const sendGuide = avgAmount > 0
+    ? `${avgAmount.toLocaleString("ko-KR")}원을 송금해주세요.`
+    : "정산 내용을 확인하고 송금해주세요.";
+
+  const url = buildShareUrl();
+  return [
+    "🟡 정산을 시작했어요",
+    "",
+    "정산 내용을 확인해주세요.",
+    "",
+    `- 정산금액 : ${total.toLocaleString("ko-KR")}원`,
+    ...itemLines,
+    `- 요청인원 : ${peopleCount}명`,
+    `- 정산기한 : ${dueStr}`,
+    "",
+    sendGuide,
+    "* 정산기한이 지나기 전에 정산을 완료해주세요.",
+    "",
+    "👉 정산현황 보기:",
+    url
+  ].join("\n");
+}
+
 async function copyReceiptLink(button, resetText) {
-  await navigator.clipboard.writeText(`${receiptShareTitle()}\n${buildShareUrl()}`);
+  const shareText = buildKakaoShareText();
+  await navigator.clipboard.writeText(shareText);
   const oldText = button.textContent;
-  button.textContent = "링크 복사 완료";
+  button.textContent = "내용 복사 완료";
   setTimeout(() => { button.textContent = resetText ?? oldText; }, 1400);
 }
 
 // Prefers the OS share sheet (카톡/문자/메일 등 바로 선택) when available,
 // falling back to a clipboard copy on desktop browsers that don't support it.
 async function shareOrCopyReceiptLink(button, resetText) {
-  const title = receiptShareTitle();
+  const shareText = buildKakaoShareText();
+  const title = "정산을 시작했어요";
+  const url = buildShareUrl();
   if (navigator.share) {
     try {
-      await navigator.share({ title, text: title, url: buildShareUrl() });
+      await navigator.share({ title, text: shareText, url });
       return;
     } catch (error) {
       if (error?.name === "AbortError") return;
