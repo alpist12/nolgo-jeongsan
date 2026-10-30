@@ -40,13 +40,13 @@ async function sendUpdatePush() {
   const response = await messaging.sendEachForMulticast({
     tokens,
     notification: {
-      title: "놀고정산 v2.0 (무인 라이브 업데이트 지원)",
-      body: "이번 마지막 업데이트를 받으시면, 앞으로는 설치 창 없이 켜기만 해도 알아서 최신 기능으로 바뀝니다!",
+      title: "놀고정산 v1.9.1 (로그인 세션 유지 & 카톡 카드형 공유)",
+      body: "새 기능이 준비되었어요. 터치하여 업데이트를 완료하세요!",
     },
     data: {
       type: "update",
-      versionCode: "12",
-      versionName: "2.0",
+      versionCode: "11",
+      versionName: "1.9.1",
     },
   });
 

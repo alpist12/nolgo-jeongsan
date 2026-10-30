@@ -1,6 +1,6 @@
 {
-  "versionCode": 12,
-  "versionName": "2.0",
+  "versionCode": 11,
+  "versionName": "1.9.1",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "무인 실시간 라이브 업데이트 및 카카오톡 카드형 영수증 공유 탑재"
+  "notes": "카카오톡 카드형 영수증 공유 및 무인 자동 업데이트 탑재 (로그인 세션 안전 유지)"
 }
