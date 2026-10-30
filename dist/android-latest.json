@@ -1,6 +1,6 @@
 {
-  "versionCode": 17,
-  "versionName": "1.9.7",
+  "versionCode": 18,
+  "versionName": "1.9.8",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "정산 완료 시 뱃지 자동 숨김 및 카카오톡 영수증 전송 오류 완전 해결"
+  "notes": "Live CodePush 무음 패치 엔진 탑재 및 영수증 정산 뱃지 정상화"
 }
