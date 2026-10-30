@@ -1,6 +1,6 @@
 {
-  "versionCode": 16,
-  "versionName": "1.9.6",
+  "versionCode": 17,
+  "versionName": "1.9.7",
   "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
-  "notes": "안드로이드 OS DownloadManager 직통 자가 업데이트 탑재 및 권한 처리 완비"
+  "notes": "정산 완료 시 뱃지 자동 숨김 및 카카오톡 영수증 전송 오류 완전 해결"
 }
