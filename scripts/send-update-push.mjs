@@ -4,7 +4,10 @@ import { getMessaging } from "firebase-admin/messaging";
 import { execSync } from "child_process";
 
 // Fetch service account from Netlify env
-const raw = execSync("npx netlify env:get FIREBASE_SERVICE_ACCOUNT_JSON", { encoding: "utf8" });
+const raw = execSync("npx netlify env:get FIREBASE_SERVICE_ACCOUNT_JSON", {
+  encoding: "utf8",
+  cwd: new URL("..", import.meta.url),
+});
 const jsonMatch = raw.slice(raw.indexOf("{"));
 const serviceAccount = JSON.parse(jsonMatch);
 
@@ -40,13 +43,13 @@ async function sendUpdatePush() {
   const response = await messaging.sendEachForMulticast({
     tokens,
     notification: {
-      title: "놀고정산 v1.9.1 (로그인 세션 유지 & 카톡 카드형 공유)",
-      body: "새 기능이 준비되었어요. 터치하여 업데이트를 완료하세요!",
+      title: "놀고정산 v1.9.2 업데이트 안내",
+      body: "카카오톡 카드형 공유 및 미정산 알림 기능이 준비되었어요. 앱을 열어 업데이트하세요!",
     },
     data: {
       type: "update",
-      versionCode: "11",
-      versionName: "1.9.1",
+      versionCode: "12",
+      versionName: "1.9.2",
     },
   });
 
