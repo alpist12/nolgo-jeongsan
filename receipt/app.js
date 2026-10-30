@@ -401,8 +401,15 @@ function shareKakaoCard() {
   }
 }
 
-// Shares via native mobile share sheet (opens KakaoTalk directly without 4019 error), fallback to clipboard copy.
+// Prefers Kakao Card share (feed), fallbacks smoothly to native OS sheet or clipboard.
 async function shareOrCopyReceiptLink(button, resetText) {
+  try {
+    if (shareKakaoCard()) {
+      return;
+    }
+  } catch (e) {
+    console.warn("Kakao card share failed, falling back", e);
+  }
   const shareText = buildKakaoShareText();
   const title = "정산을 시작했어요";
   const url = buildShareUrl();
