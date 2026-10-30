@@ -3,14 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <script>
-      // KakaoTalk's in-app browser intercepts every tapped link and renders
-      // it in its own WebView instead of handing off to the OS — Android
-      // never gets the chance to apply the app's App Links intent-filter,
-      // so an invite link just opens the website instead of the app.
-      // KakaoTalk recognizes this custom scheme as "break out to an
-      // external browser/app", which does trigger normal Android link
-      // resolution (and therefore the installed app, if verified for this
-      // domain). Must run before anything else loads.
+      // Leave KakaoTalk's WebView so Android App Links can open the installed app.
       (function () {
         if (/KAKAOTALK/i.test(navigator.userAgent || "")) {
           location.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(location.href);
@@ -22,8 +15,8 @@
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
     <title>놀고정산</title>
-    <script type="module" crossorigin src="./assets/index-BJXLst_Q.js"></script>
-    <link rel="stylesheet" href="./assets/index-BTATblPT.css">
+    <script type="module" crossorigin src="./assets/index-BNW6BX0U.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DDmllYU_.css">
   </head>
   <body>
     <div id="root"></div>

@@ -52,15 +52,19 @@ export const handler = async (event) => {
   const rawDate = receipt.mode === "budget" ? receipt.plannedDate : receipt.usedDate;
   const fallback = receipt.mode === "budget" ? "예산 영수증" : "정산 영수증";
   const title = `${displayDate(rawDate)} ${String(receipt.title || fallback).trim()}`;
+  const total = Object.values(receipt.items || {}).reduce((sum, item) => sum + Number(item?.amount || 0), 0);
+  const people = new Set(Object.values(receipt.items || {}).flatMap((item) => [item?.payer, ...Object.values(item?.users || {})]).filter((name) => name && name !== "공금"));
+  const description = `정산금액 ${total.toLocaleString("ko-KR")}원 · ${people.size || 1}명 · 정산 내용을 확인해 주세요.`;
   const targetParams = new URLSearchParams({ id });
   if (room || receipt.roomId) targetParams.set("room", room || receipt.roomId);
   const target = `/receipt/view.html?${targetParams.toString()}`;
   const safeTitle = escapeHtml(title);
+  const safeDescription = escapeHtml(description);
   const safeTarget = escapeHtml(target);
 
   return {
     statusCode: 200,
     headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "public, max-age=60" },
-    body: `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title><meta property="og:title" content="${safeTitle}"><meta property="og:description" content="놀고정산 공유 영수증"><meta property="og:type" content="website"><meta http-equiv="refresh" content="0;url=${safeTarget}"></head><body><a href="${safeTarget}">${safeTitle}</a><script>location.replace(${JSON.stringify(target)})</script></body></html>`
+    body: `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${safeTitle}</title><meta property="og:title" content="정산을 시작했어요 · ${safeTitle}"><meta property="og:description" content="${safeDescription}"><meta property="og:image" content="https://nolgo.netlify.app/nolgo-3d-banners.png"><meta property="og:type" content="website"><meta property="og:site_name" content="놀고정산"><meta http-equiv="refresh" content="0;url=${safeTarget}"></head><body><a href="${safeTarget}">${safeTitle}</a><script>location.replace(${JSON.stringify(target)})</script></body></html>`
   };
 };

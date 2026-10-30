@@ -1,6 +1,6 @@
 {
-  "versionCode": 9,
-  "versionName": "1.8",
-  "apkUrl": "https://alpist12.github.io/nolgo-jeongsan/nolgo-latest.apk",
-  "notes": "GitHub 배포 및 초대 링크 업데이트"
+  "versionCode": 10,
+  "versionName": "1.9",
+  "apkUrl": "https://alpist12.github.io/nolgo/nolgo-latest.apk",
+  "notes": "크루별 영수증 복구, 계정 UID 연결, 영수증 추가 및 송금·공유 개선"
 }
